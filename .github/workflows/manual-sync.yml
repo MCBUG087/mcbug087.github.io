@@ -1,7 +1,7 @@
-name: Manual Sync from A
+name: Manual Sync with Subdirectories
 
 on:
-  workflow_dispatch:  # 仅保留手动触发
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -9,30 +9,58 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          persist-credentials: false
 
-      - name: Delete old directories
+      - name: Clean target directories
         run: |
           rm -rf WatchTool
           rm -rf update/WatchTool_Wear
-
-      - name: Download WatchTool
-        run: |
-          wget -r -np -nH --cut-dirs=1 -P ./WatchTool https://mcbug087.eu.org/WatchTool/
-          
-      - name: Download WatchTool_Wear
-        run: |
+          mkdir -p WatchTool
           mkdir -p update/WatchTool_Wear
-          wget -r -np -nH --cut-dirs=2 -P ./update/WatchTool_Wear https://mcbug087.eu.org/update/WatchTool_Wear/
 
-      - name: Commit changes
+      - name: Sync WatchTool with subdirs
+        env:
+          BASE_URL: "https://mcbug087.eu.org/WatchTool"
+        run: |
+          echo "步骤1: 下载文件列表"
+          wget -q $BASE_URL/filelist.txt -O WatchTool/filelist.txt
+          
+          echo "步骤2: 处理文件和子目录"
+          cd WatchTool
+          while IFS= read -r file; do
+            if [ -n "$file" ]; then
+              # 创建必要的子目录
+              dir_path=$(dirname "$file")
+              if [ ! -d "$dir_path" ]; then
+                mkdir -p "$dir_path"
+                echo "创建目录: $dir_path"
+              fi
+              
+              # 下载文件
+              echo "下载文件: $file"
+              wget -q --show-progress "$BASE_URL/$file" -O "$file"
+            fi
+          done < filelist.txt
+          cd ..
+
+      - name: Sync WatchTool_Wear
+        env:
+          BASE_URL: "https://mcbug087.eu.org/update/WatchTool_Wear"
+        run: |
+          wget -q $BASE_URL/filelist.txt -O update/WatchTool_Wear/filelist.txt
+          cd update/WatchTool_Wear
+          while IFS= read -r file; do
+            if [ -n "$file" ]; then
+              mkdir -p "$(dirname "$file")"
+              wget -q --show-progress "$BASE_URL/$file" -O "$file"
+            fi
+          done < filelist.txt
+          cd ../..
+
+      - name: Commit and Push
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@users.noreply.github.com"
           git add .
-          git commit -m "手动同步: 从A站更新WatchTool目录" || echo "无变更无需提交"
-
-      - name: Push changes
-        if: success()
-        run: git push origin main
+          git status
+          git commit -m "同步更新: $(date +'%Y-%m-%d %H:%M:%S')"
+          git push origin main
