@@ -1,0 +1,38 @@
+name: Manual Sync from A
+
+on:
+  workflow_dispatch:  # 仅保留手动触发
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Delete old directories
+        run: |
+          rm -rf WatchTool
+          rm -rf update/WatchTool_Wear
+
+      - name: Download WatchTool
+        run: |
+          wget -r -np -nH --cut-dirs=1 -P ./WatchTool https://mcbug087.eu.org/WatchTool/
+          
+      - name: Download WatchTool_Wear
+        run: |
+          mkdir -p update/WatchTool_Wear
+          wget -r -np -nH --cut-dirs=2 -P ./update/WatchTool_Wear https://mcbug087.eu.org/update/WatchTool_Wear/
+
+      - name: Commit changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@users.noreply.github.com"
+          git add .
+          git commit -m "手动同步: 从A站更新WatchTool目录" || echo "无变更无需提交"
+
+      - name: Push changes
+        if: success()
+        run: git push origin main
