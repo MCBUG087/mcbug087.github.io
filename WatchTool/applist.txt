@@ -1,0 +1,33 @@
+1.WatchBox（XTC专用，需核心破解）
+2.速算王者Pro（XTC专用）
+3.小天才输入法
+4.狗叫盒子（XTC专用，部分功能需root）
+5.小度（XTC专用）
+6.快手极速版（不推荐，改了dpi也极其不好用）
+7.SystemPlus（XTC专用，系统综合优化xp模块，需xposed）
+8.设置（XTC专用，需核心破解）
+9.主题（XTC专用，需核心破解）
+10.抖音短视频
+11.蓝微信（微信儿童版魔改版）
+12.via浏览器
+13.GBoard
+14.正弦工具箱（XTC专用，部分功能需root）
+15.Xposed Edge Pro（xp模块，需xposed）
+16.App Settings 重生版（需root和xposed）
+17.Activity Manager（活动启动器，打开部分活动需root）
+18.Magisk Delta（25210版，需root）
+19.哔哩终端
+20.文件管理器
+21.WiFiADB（需root）
+22.WatchTool（手表版）（未开放下载）
+23.GameGuardian（需root或框架，XTC手表会有未知问题导致手表重启）
+24.WeichatPro2（XTC专用，微聊功能扩展xp模块，需xposed或框架）
+25.应用启动器（旧版本用于XTC打开第三方，现在改了包名）
+26.Shizuku（需root或adb shell权限）
+27.Minecraft 0.14.3
+28.微思应用商店（免责声明：WatchTool仅为搬运，如侵犯了您的权益请联系我）
+29.QQPro（时不时更新）
+30.V2Ray（32位）
+31.Firefox Lite（部分功能闪退）
+32.弦-应用商店（免责声明：WatchTool仅为搬运，如侵犯了您的权益请联系我）
+33.谷歌的WebView（不是系统自带的）
